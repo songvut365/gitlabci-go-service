@@ -1,0 +1,13 @@
+build:
+    stage: build
+    services:
+        - docker:dind
+    image: docker:latest
+    before_script:
+        - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+        - docker context create tls-environment
+        - docker buildx create --name multiarch-builder --use tls-environment
+    script:
+        - docker buildx build --push --platform linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8 --tag $CI_REGISTRY_USER/go-service:latest --file ./app/Dockerfile .
+    only:
+        - main
