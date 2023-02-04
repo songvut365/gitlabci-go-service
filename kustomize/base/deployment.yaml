@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-service
+spec:
+  selector:
+    matchLabels:
+      app: go-service
+  template:
+    metadata:
+      labels:
+        app: go-service
+    spec:
+      containers:
+      - name: go-service
+        image: songvut365/go-service:latest
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 1323
+        volumeMounts:
+        - mountPath: /app/config
+          name: config
+      volumes:
+        - name: config
+          configMap:
+            name: config
