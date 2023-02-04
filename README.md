@@ -1,4 +1,4 @@
-# Go Service
+# GitLab CI - Go Service
 
 ## Argo CD
 
