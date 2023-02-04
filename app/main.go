@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"net/http"
+
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/pkg/errors"
 	"github.com/spf13/viper"
-	"log"
-	"net/http"
 )
 
 type AppConfig struct {
@@ -51,9 +52,18 @@ func main() {
 
 	// router
 	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World!")
+		res := Response{
+			Message: "Hello, World",
+			Env:     conf.App.Env,
+		}
+		return c.JSON(http.StatusOK, res)
 	})
 
 	// start server
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%v", conf.App.Port)))
+}
+
+type Response struct {
+	Message string `json:"message"`
+	Env     string `json:"env"`
 }
